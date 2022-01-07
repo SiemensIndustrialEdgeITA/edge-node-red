@@ -1,0 +1,34 @@
+version: "2.4"
+
+services:
+    edge-node-red:
+        container_name: edge-node-red
+        build:
+            context: ./edge-node-red
+            dockerfile: Dockerfile
+            args:
+                - NODE_RED_VERSION=2.1.4
+        image: edge-node-red:2.1.4
+        restart: unless-stopped
+        environment:
+            - TZ=Europe/Rome
+        cap_add:
+            - SYS_ADMIN
+            - NET_ADMIN
+        ports:
+            - "41880:1880"
+            - "44840:44840"
+        networks:
+            - proxy-redirect
+        volumes:
+            - edge-node-red-data:/data/
+            - /media/simatic:/media/simatic:ro,slave
+        mem_limit: 768m
+
+volumes:
+    edge-node-red-data:
+        name: edge-node-red-data
+
+networks:
+    proxy-redirect:
+        name: proxy-redirect
