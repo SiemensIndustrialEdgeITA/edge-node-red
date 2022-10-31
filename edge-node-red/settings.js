@@ -55,6 +55,7 @@ module.exports = {
      */
     //userDir: '/home/nol/.node-red/',
 
+
     /** Node-RED scans the `nodes` directory in the userDir to find local node files.
      * The following property can be used to specify an additional directory to scan.
      */
@@ -137,6 +138,7 @@ module.exports = {
      *  - httpNodeCors
      *  - httpNodeMiddleware
      *  - httpStatic
+     *  - httpStaticRoot
      ******************************************************************************/
 
     /** the tcp port that the Node-RED web server is listening on */
@@ -152,7 +154,7 @@ module.exports = {
     /** The maximum size of HTTP request that will be accepted by the runtime api.
      * Default: 5mb
      */
-    apiMaxLength: '50mb',
+    apiMaxLength: '100mb',
 
     /** The following property can be used to pass custom options to the Express.js
      * server used by Node-RED. For a full list of available options, refer
@@ -218,12 +220,31 @@ module.exports = {
     /** When httpAdminRoot is used to move the UI to a different root path, the
      * following property can be used to identify a directory of static content
      * that should be served at http://localhost:1880/.
-     */
-    httpStatic: '/data/static/',
-
+         * When httpStaticRoot is set differently to httpAdminRoot, there is no need 
+         * to move httpAdminRoot
+         */
+        httpStatic: '/data/static/', //single static source
+        /* OR multiple static sources can be created using an array of objects... */
+        //httpStatic: [
+        //    {path: '/home/nol/pics/',    root: "/img/"}, 
+        //    {path: '/home/nol/reports/', root: "/doc/"}, 
+        //],
+    
+        /**  
+         * All static routes will be appended to httpStaticRoot
+         * e.g. if httpStatic = "/home/nol/docs" and  httpStaticRoot = "/static/"
+         *      then "/home/nol/docs" will be served at "/static/"
+         * e.g. if httpStatic = [{path: '/home/nol/pics/', root: "/img/"}]
+         *      and httpStaticRoot = "/static/"
+         *      then "/home/nol/pics/" will be served at "/static/img/"
+         */
+        //httpStaticRoot: '/static/',
+    
     /*******************************************************************************
      * Runtime Settings
      *  - lang
+     *  - runtimeState
+     *  - diagnostics
      *  - logging
      *  - contextStorage
      *  - exportGlobalContextKeys
@@ -236,6 +257,31 @@ module.exports = {
      */
     // lang: "de",
 
+        /** Configure diagnostics options 
+         * - enabled:  When `enabled` is `true` (or unset), diagnostics data will
+         *   be available at http://localhost:1880/diagnostics  
+         * - ui: When `ui` is `true` (or unset), the action `show-system-info` will 
+         *   be available to logged in users of node-red editor  
+        */
+        diagnostics: {
+            /** enable or disable diagnostics endpoint. Must be set to `false` to disable */
+            enabled: true,
+            /** enable or disable diagnostics display in the node-red editor. Must be set to `false` to disable */
+            ui: true,
+        },
+        /** Configure runtimeState options 
+         * - enabled:  When `enabled` is `true` flows runtime can be Started/Stoped 
+         *   by POSTing to available at http://localhost:1880/flows/state  
+         * - ui: When `ui` is `true`, the action `core:start-flows` and 
+         *   `core:stop-flows` will be available to logged in users of node-red editor
+         *   Also, the deploy menu (when set to default) will show a stop or start button
+         */
+        runtimeState: {
+            /** enable or disable flows/state endpoint. Must be set to `false` to disable */
+            enabled: true,
+            /** show or hide runtime stop/start options in the node-red editor. Must be set to `false` to hide */
+            ui: true,
+        },
     /** Configure the logging output */
     logging: {
         /** Only console logging is currently supported */
@@ -328,6 +374,12 @@ module.exports = {
          * a collection of themes to chose from.
          */
         //theme: "",
+    
+            /** To disable the 'Welcome to Node-RED' tour that is displayed the first
+             * time you access the editor for each release of Node-RED, set this to false
+             */
+            tours: false,
+    
         palette: {
             /** The following property can be used to order the categories in the editor
              * palette. If a node's category is not in the list, the category will get
@@ -336,6 +388,7 @@ module.exports = {
              */
             //categories: ['subflows', 'common', 'function', 'network', 'sequence', 'parser', 'storage'],
         },
+    
         projects: {
             /** To enable the Projects feature, set this value to true */
             enabled: false,
@@ -349,11 +402,12 @@ module.exports = {
                 mode: "manual"
             }
         },
+    
         codeEditor: {
             /** Select the text editor component used by the editor.
-             * Defaults to "ace", but can be set to "ace" or "monaco"
+                 * As of Node-RED V3, this defaults to "monaco", but can be set to "ace" if desired
              */
-            lib: "ace",
+                lib: "monaco",
             options: {
                 /** The follow options only apply if the editor is set to "monaco"
                  *
@@ -361,9 +415,9 @@ module.exports = {
                  * packages/node_modules/@node-red/editor-client/src/vendor/monaco/dist/theme
                  * e.g. "tomorrow-night", "upstream-sunburst", "github", "my-theme"
                  */
-                theme: "vs",
+                    // theme: "vs",
                 /** other overrides can be set e.g. fontSize, fontFamily, fontLigatures etc.
-                 * for the full list, see https://microsoft.github.io/monaco-editor/api/interfaces/monaco.editor.istandaloneeditorconstructionoptions.html
+                     * for the full list, see https://microsoft.github.io/monaco-editor/api/interfaces/monaco.editor.IStandaloneEditorConstructionOptions.html
                  */
                 //fontSize: 14,
                 //fontFamily: "Cascadia Code, Fira Code, Consolas, 'Courier New', monospace",
@@ -426,7 +480,6 @@ module.exports = {
      *  ioMiddleware:{function or array}, (socket,next) - socket.io middleware
      */
     ui: { path: "edge-node-red-ui" },
-
 
     /** Colourise the console output of the debug node */
     //debugUseColors: true,

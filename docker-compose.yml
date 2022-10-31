@@ -7,8 +7,8 @@ services:
             context: ./edge-node-red
             dockerfile: Dockerfile
             args:
-                - NODE_RED_VERSION=2.1.4
-        image: edge-node-red:2.1.4
+                - NODE_RED_VERSION=3.0.2
+        image: edge-node-red:3.0.2
         restart: unless-stopped
         environment:
             - TZ=Europe/Rome

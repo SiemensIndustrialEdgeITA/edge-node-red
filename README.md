@@ -38,9 +38,9 @@ Node-RED Application for Industrial Edge with some of most used Node-RED Nodes p
 - OS: Windows or Linux
 - Docker minimum V18.09
 - Docker Compose V2.0 - V2.4
-- Industrial Edge App Publisher (IEAP) V1.3.7
-- Industrial Edge Management (IEM) V1.4.3
-- Industrial Edge Device (IED) V1.3.0-57
+- Industrial Edge App Publisher (IEAP) V1.6.5
+- Industrial Edge Management (IEM) V1.8.5
+- Industrial Edge Device (IED) V1.8.0-6
 
 ### Hardware Requirements
 
@@ -62,18 +62,18 @@ Below you will find the steps required to download the pre-compiled app or to cr
 
 You can either import a directly downloadable .app file below, or use the provided source code to build a new app from scratch.
 
-Please refer to the [Documentation](#documentation) section for detailed information on Industrial Edge application development.
+Please refer to the [References](#references) section for detailed information on Industrial Edge application development.
 
 ### Download the application
 
 The **edge-node-red** application can be downloaded in .app format using this secure Google Drive link:
 
-- [edge-node-red_2.1.4.app](https://drive.google.com/file/d/1IugsgmszjCWfavKFj63oOpdGAYPxTZUN/view?usp=sharing)
+- [edge-node-red_2.1.4.app](https://drive.google.com/file/d/1qq4rACKkZ9cMKIoEigDxe72Kh66FbCYh/view?usp=sharing)
 
 ### Import an application in .app format
 
 - Open the **Industrial Edge App Publisher** software
-- Import the `edge-node-red_2.1.4.app` file using the **Import** button
+- Import the `edge-node-red_3.0.2.app` file using the **Import** button
 - The new imported application will appear in the **Standalone Applications** section
 
 ### Create a new standalone application
@@ -105,7 +105,7 @@ By importing the `docker-compose.yml` file in the Edge App Publisher some change
 
 Below is a brief description on how to publish your application to your IEM.
 
-For more detailed information please see the official Industrial Edge GitHub guide to [uploading apps to the IEM](https://github.com/industrial-edge/upload-app-to-industrial-edge-management) and the [Documentation](#documentation) section.
+For more detailed information please see the official Industrial Edge GitHub guide to [uploading apps to the IEM](https://github.com/industrial-edge/upload-app-to-industrial-edge-management) and the [References](#references) section.
 
 #### Link your Industrial Edge App Publisher
 
@@ -167,34 +167,39 @@ The [package.json](edge-node-red/package.json) file lists all the extra nodes in
   ...
   ...
     "dependencies": {
-        "node-red": "^2.1.4",
-        "@mindconnect/node-red-contrib-mindconnect": "^3.12.0",
+        "node-red": "^3.0.2",
+        "@mindconnect/node-red-contrib-mindconnect": "^3.12.1",
         "node-red-contrib-azureiothubnode": "^0.5.3",
         "node-red-contrib-influxdb": "^0.6.1",
         "node-red-contrib-mssql-plus": "^0.7.3",
-        "node-red-node-mysql" : "^1.0.0",
+        "node-red-node-mysql" : "^1.0.3",
         "node-red-contrib-postgres-variable": "^0.1.5",
-        "node-red-contrib-s7": "^3.0.0",
-        "node-red-contrib-opcua": "^0.2.254",
-        "node-red-contrib-modbus": "^5.16.0",
+        "net-keepalive": "^3.0.0",
+        "node-red-contrib-s7comm": "^1.1.6",
+        "node-red-contrib-s7": "^3.1.0",
+        "node-red-contrib-opcua": "^0.2.289",
+        "node-red-contrib-modbus": "^5.23.2",
         "node-red-contrib-cip-ethernet-ip" : "^1.1.3",
         "node-red-node-sqlite" : "^1.0.3",
         "node-red-contrib-spreadsheet-in" : "^0.6.0",
         "node-red-contrib-simple-message-queue": "^0.2.8",
         "node-red-contrib-soap": "^0.1.0",
         "node-red-contrib-string": "^1.0.0",
-        "node-red-contrib-telegrambot": "^11.2.0",
-        "node-red-node-email": "^1.14.0",
+        "node-red-contrib-telegrambot": "^14.8.1",
+        "node-red-node-email": "^1.18.1",
         "node-red-node-openweathermap": "^0.5.1",
-        "node-red-node-ping": "^0.3.1",
-        "node-red-node-random": "^0.4.0",
+        "node-red-node-ping": "^0.3.3",
+        "node-red-node-random": "^0.4.1",
         "node-red-contrib-moment": "^4.0.0",
         "node-red-contrib-ui-led": "^0.4.11",
-        "node-red-node-ui-table": "^0.3.11",
+        "node-red-node-ui-table": "^0.4.3",
         "node-red-contrib-ui-level": "^0.1.46",
         "node-red-contrib-ui-media": "^2.0.0",
-        "node-red-dashboard": "^3.1.3",
-        "node-red-contrib-ui-svg" : "^2.3.1"
+        "node-red-dashboard": "^3.2.0",
+        "node-red-contrib-ui-svg" : "^2.3.1",
+        "node-red-contrib-fs-ops": "^1.6.0",
+        "node-red-contrib-fs": "^1.4.1",
+        "node-red-contrib-smb": "1.2.0"
     }
 }
 ```
@@ -210,17 +215,19 @@ The file [settings.js](edge-node-red/settings.js) contains the default settings 
 | Property | Default Value | Custom Value |
 |----------|---------------|--------------|
 | adminAuth | not used | `{ type: "credentials", users: [{ username: "edge", password: "<encrypted-password-goes-here>", permissions: "*" }]},`|
-| apiMaxLength | `5mb` | `50mb` |
+| apiMaxLength | `5mb` | `100mb` |
 | httpStatic | not used | `/data/static/`|
 | debugMaxLength | `1000` | `10000` |
-| ui |`{ path: "ui }` | `{ path: "edge-node-red-ui" }` |
+| ui |`{ path: "ui" }` | `{ path: "edge-node-red-ui" }` |
+| runtimeState |`{ enabled: false, ui: false }` | `{ enabled: true, ui: true }` |
+| tours |`true` | `false` |
 
 ### `docker-compose.yml`
 
 The Node-RED Docker base image used in this App is built using [docker-compose](https://docs.docker.com/compose/) tool with the command `docker-compose up -d --build` on the [docker-compose.yml](docker-compose.yml) file that will:
 
 - creates the `edge-node-red` service container
-- build our custom Node-RED Docker image using the file [Dockerfile](edge-node-red/Dockerfile) file and passing to it the argument **2.1.4** as the wanted `NODE_RED_VERSION` to be installed
+- build our custom Node-RED Docker image using the file [Dockerfile](edge-node-red/Dockerfile) file and passing to it the argument **3.0.2** as the wanted `NODE_RED_VERSION` to be installed
 - sets the timezone to `Europe/Rome`
 - Maps the container port 1880 to the the host port **41880** (for Node-RED Web Interface)
 - Maps the container port 44840 to the the host port **44840** (for extra features like e.g. exposure of an OPCUA Server with `node-red-contrib-opcua` node.)

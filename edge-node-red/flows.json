@@ -1,1 +1,20 @@
-[]
+[
+    {
+        "id": "ea7162f0c7f2103a",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "fa59839edd6a8c54",
+        "type": "comment",
+        "z": "ea7162f0c7f2103a",
+        "name": "Welcome to edge-node-red version 3.0.2!",
+        "info": "",
+        "x": 200,
+        "y": 60,
+        "wires": []
+    }
+]
