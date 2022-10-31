@@ -68,7 +68,7 @@ Please refer to the [References](#references) section for detailed information o
 
 The **edge-node-red** application can be downloaded in .app format using this secure Google Drive link:
 
-- [edge-node-red_2.1.4.app](https://drive.google.com/file/d/1qq4rACKkZ9cMKIoEigDxe72Kh66FbCYh/view?usp=sharing)
+- [edge-node-red_3.0.2.app](https://drive.google.com/file/d/1qq4rACKkZ9cMKIoEigDxe72Kh66FbCYh/view?usp=sharing)
 
 ### Import an application in .app format
 
